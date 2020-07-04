@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "FAH_Pull", "FAH_Pull\FAH_Pull.njsproj", "{DE1425BB-0755-45F1-AB1B-D3EEDC10840C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DE1425BB-0755-45F1-AB1B-D3EEDC10840C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE1425BB-0755-45F1-AB1B-D3EEDC10840C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE1425BB-0755-45F1-AB1B-D3EEDC10840C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE1425BB-0755-45F1-AB1B-D3EEDC10840C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4E874FCF-1B76-4407-A595-B5426A0BBA43}
+	EndGlobalSection
+EndGlobal

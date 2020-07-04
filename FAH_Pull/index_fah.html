@@ -1,0 +1,55 @@
+<HTML><HEAD><TITLE>FAH Stats</TITLE>
+
+<style>
+table, th , td  {
+  border: 1px solid grey;
+  border-collapse: collapse;
+  padding: 5px;
+}
+table tr:nth-child(odd) {
+  background-color: #f1f1f1;
+}
+table tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+</HEAD>
+<BODY>
+<div ng-app="fahApp" ng-controller="statsCtrl">
+<form>
+Row count: <input type=number min=1 ng-model="rowCount" ng-change="gqlDisplay()">
+</form>
+<table>
+	<tr>
+	<th>ID</th>
+    <th>Last Team Work Unit</th>
+	<th>Rank</th>
+	<th>Team Credit</th>
+	<th>Team Work Units</th>
+  </tr>
+  <tr ng-repeat="x in gql_stats">
+    <td>{{ x.ID }}</td>
+    <td>{{ x.last_team_wu }}</td>
+	<td>{{ x.rank }}</td>
+	<td>{{ x.team_credit }}</td>
+	<td>{{ x.team_work_units }}</td>
+  </tr>
+</table>
+ </div>
+ 
+<script>
+var app = angular.module('fahApp', []);
+app.controller('statsCtrl', function($scope ,$http) {
+	$scope.rowCount = 10;
+	$scope.gqlDisplay = function() {
+   $http.get("graphql_fah.php?query={stat {ID last_team_wu rank team_credit team_work_units}}&numRows=" + $scope.rowCount)
+   .then(function (response) {$scope.gql_stats = response.data.data.stat;});
+   }
+   $scope.gqlDisplay();
+});
+</script>
+</BODY>
+</HTML>
