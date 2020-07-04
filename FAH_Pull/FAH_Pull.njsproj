@@ -29,6 +29,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Content Include="app.js" />
+    <Content Include="FAH_rec.ps1" />
     <Content Include="graphql.php" />
     <Content Include="graphql_fah.php" />
     <Content Include="index.html" />
