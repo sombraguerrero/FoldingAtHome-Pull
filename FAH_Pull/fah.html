@@ -1,4 +1,4 @@
-<HTML><HEAD><TITLE>Boinc Stats</TITLE>
+<HTML><HEAD><TITLE>FAH Stats</TITLE>
 
 <style>
 table, th , td  {
@@ -26,21 +26,19 @@ Row count: <input type=number min=1 ng-model="rowCount" ng-change="gqlDisplay()"
 <table>
 	<tr>
 	<th>ID</th>
-	<th>Day</th>
-    <th>User Total Credit</th>
-	<th>User ExpAvg Credit</th>
-	<th>Host Total Credit</th>
-	<th>Host ExpAvg Credit</th>
-	<th>Project Source</th>
+    <th>Last Team Work Unit</th>
+	<th>Rank</th>
+	<th>Team Credit</th>
+	<th>Team Work Units</th>
+	<th>Team Name</th>
   </tr>
   <tr ng-repeat="x in gql_stats">
-	<td>{{ x.ID }}</td>
-    <td>{{ x.day }}</td>
-    <td>{{ x.user_total_credit }}</td>
-	<td>{{ x.user_expavg_credit }}</td>
-	<td>{{ x.host_total_credit }}</td>
-	<td>{{ x.host_expavg_credit }}</td>
-	<td>{{ x.projectSource }}</td>
+    <td>{{ x.ID }}</td>
+    <td>{{ x.last_team_wu }}</td>
+	<td>{{ x.rank }}</td>
+	<td>{{ x.team_credit }}</td>
+	<td>{{ x.team_work_units }}</td>
+	<td>{{ x.equipo_nombre }}</td>
   </tr>
 </table>
  </div>
@@ -48,9 +46,9 @@ Row count: <input type=number min=1 ng-model="rowCount" ng-change="gqlDisplay()"
 <script>
 var app = angular.module('fahApp', []);
 app.controller('statsCtrl', function($scope ,$http) {
-	$scope.rowCount = 12;
+	$scope.rowCount = 10;
 	$scope.gqlDisplay = function() {
-   $http.get(`graphql.php?query={stat (rows: ${$scope.rowCount}){ID day user_total_credit user_expavg_credit host_total_credit host_expavg_credit projectSource}}`)
+   $http.get(`graphql_fah.php?query={stat (rows: ${$scope.rowCount}){ID last_team_wu rank team_credit team_work_units equipo_nombre}}`)
    .then(function (response) {$scope.gql_stats = response.data.data.stat;});
    }
    $scope.gqlDisplay();

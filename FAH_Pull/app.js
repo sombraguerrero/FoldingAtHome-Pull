@@ -29,15 +29,15 @@ https.get('https://stats.foldingathome.org/api/donor/3107', (res) => {
   res.on('end', () => {
     try {
       const postData = JSON.parse(rawData);
-      const teamData = postData.teams[2];
-      var myQuery = "{\"query\": \"mutation MutateStat($in_ltw:String, $in_rank:Int, $in_tc:Int, $in_twu:Int) {writeStat(last_team_wu : $in_ltw, rank : $in_rank, team_credit: $in_tc, team_work_units: $in_twu) {last_team_wu rank team_credit team_work_units}}\",";
-      var varObj = { in_ltw: teamData.last, in_rank: postData.rank, in_tc: teamData.credit, in_twu: teamData.wus };
+      const teamData = postData.teams[1];
+      var myQuery = "{\"query\": \"mutation MutateStat($in_ltw:String, $in_rank:Int, $in_tc:Int, $in_twu:Int, $in_tn:String) {writeStat(last_team_wu : $in_ltw, rank : $in_rank, team_credit: $in_tc, team_work_units: $in_twu, equipo_nombre: $in_tn) {last_team_wu rank team_credit team_work_units equipo_nombre}}\",";
+      var varObj = { in_ltw: teamData.last, in_rank: postData.rank, in_tc: teamData.credit, in_twu: teamData.wus, in_tn: teamData.name};
       var jsonVars = JSON.stringify(varObj) + '}';
       var myVars = "\"variables\":" + jsonVars;
       const writeData = myQuery + myVars;
 
       const options = {
-        hostname: 'settersynology',
+        hostname: 'localhost',
         path: '/boinc/graphql_fah.php',
         method: 'POST',
         headers: {

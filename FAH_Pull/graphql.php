@@ -19,6 +19,15 @@ use GraphQL\GraphQL;
 use GraphQL\Type\Schema;
 header('Content-Type: application/json');
 
+function getMax()
+{
+	$boincConn = new PDO(SERVER, USER, PWD);
+	$boincQuery = $boincConn->prepare("SELECT projectSource, MAX(user_expavg_credit) as 'user_expavg_credit' FROM boinc_data WHERE projectSource = 'GPUGrid' UNION SELECT projectSource, MAX(user_expavg_credit) FROM boinc_data WHERE projectSource = 'Rosetta' UNION SELECT projectSource, MAX(user_expavg_credit) FROM boinc_data WHERE projectSource = 'World Community Grid'");
+	$boincQuery->execute();
+	$stats = $boincQuery->fetchAll(PDO::FETCH_ASSOC);
+	return $stats;
+}
+
 function getStats($qty)
 {
 	$boincConn = new PDO(SERVER, USER, PWD);
@@ -47,9 +56,16 @@ $boincType = new ObjectType([
         'fields' => [
             'stat' => [
                 'type' => Type::listOf($boincType),
-                'resolve' => function ($root, $args) { return $root; }
+				'args' => [
+					'rows' => Type::int()
+				],
+                'resolve' => function ($root, $args) { return getStats($args['rows']); }
+            ],
+			'maxstat' => [
+                'type' => Type::listOf($boincType),
+                'resolve' => function ($root, $args) { return getMax(); }
             ]
-        ]
+		]
     ]);
 	
 	$schema = new Schema([
@@ -58,10 +74,8 @@ $boincType = new ObjectType([
 
 	#print_r(get_required_files());
 	try {
-			$boincQty = $_GET['numRows'];
 			$query = $_GET['query'];
 			$variableValues = [];
-			$rootValue = getStats($boincQty);
 			$result = GraphQL::executeQuery($schema, $query, $rootValue, null, $variableValues);
 			echo json_encode($result);
 		}
