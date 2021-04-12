@@ -16,7 +16,7 @@ table tr:nth-child(even) {
 </style>
 
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.0/angular.min.js"></script> -->
-<script src="angular-1.8.0/angular.min.js"></script>
+<script src="angular.min.js"></script>
 </HEAD>
 <BODY>
 <div ng-app="fahApp" ng-controller="statsCtrl">
@@ -28,7 +28,7 @@ Row count: <input type=number min=1 ng-model="rowCount" ng-change="gqlDisplay()"
 	<th>ID</th>
     <th>Last Team Work Unit</th>
 	<th>Rank</th>
-	<th>Team Credit</th>
+	<th>Team Score</th>
 	<th>Team Work Units</th>
 	<th>Team Name</th>
   </tr>
@@ -36,9 +36,9 @@ Row count: <input type=number min=1 ng-model="rowCount" ng-change="gqlDisplay()"
     <td>{{ x.ID }}</td>
     <td>{{ x.last_team_wu }}</td>
 	<td>{{ x.rank }}</td>
-	<td>{{ x.team_credit }}</td>
+	<td>{{ x.team_score }}</td>
 	<td>{{ x.team_work_units }}</td>
-	<td>{{ x.equipo_nombre }}</td>
+	<td>{{ x.team_name }}</td>
   </tr>
 </table>
  </div>
@@ -48,7 +48,7 @@ var app = angular.module('fahApp', []);
 app.controller('statsCtrl', function($scope ,$http) {
 	$scope.rowCount = 10;
 	$scope.gqlDisplay = function() {
-   $http.get(`graphql_fah.php?query={stat (rows: ${$scope.rowCount}){ID last_team_wu rank team_credit team_work_units equipo_nombre}}`)
+   $http.get(`graphql_fah.php?query={stat (rows: ${$scope.rowCount}){ID last_team_wu rank team_score team_work_units team_name}}`)
    .then(function (response) {$scope.gql_stats = response.data.data.stat;});
    }
    $scope.gqlDisplay();

@@ -3,7 +3,7 @@ const https = require('https');
 const http = require('http');
 
 // Stage Get request to retrieve data from FAH API
-https.get('https://stats.foldingathome.org/api/donor/3107', (res) => {
+https.get('https://api2.foldingathome.org/uid/3107', (res) => {
   const { statusCode } = res;
   const contentType = res.headers['content-type'];
 
@@ -30,8 +30,8 @@ https.get('https://stats.foldingathome.org/api/donor/3107', (res) => {
     try {
       const postData = JSON.parse(rawData);
       const teamData = postData.teams[1];
-      var myQuery = "{\"query\": \"mutation MutateStat($in_ltw:String, $in_rank:Int, $in_tc:Int, $in_twu:Int, $in_tn:String) {writeStat(last_team_wu : $in_ltw, rank : $in_rank, team_credit: $in_tc, team_work_units: $in_twu, equipo_nombre: $in_tn) {last_team_wu rank team_credit team_work_units equipo_nombre}}\",";
-      var varObj = { in_ltw: teamData.last, in_rank: postData.rank, in_tc: teamData.credit, in_twu: teamData.wus, in_tn: teamData.name};
+      var myQuery = "{\"query\": \"mutation MutateStat($in_ltw:String, $in_rank:Int, $in_tscore:Int, $in_twu:Int, $in_tn:String) {writeStat(last_team_wu : $in_ltw, rank : $in_rank, team_score: $in_tscore, team_work_units: $in_twu, team_name: $in_tn) {last_team_wu rank team_score team_work_units team_name}}\",";
+      var varObj = { in_ltw: teamData.last, in_rank: postData.rank, in_tscore: teamData.score, in_twu: teamData.wus, in_tn: teamData.name};
       var jsonVars = JSON.stringify(varObj) + '}';
       var myVars = "\"variables\":" + jsonVars;
       const writeData = myQuery + myVars;

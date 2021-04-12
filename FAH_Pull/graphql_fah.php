@@ -11,7 +11,7 @@
 /**
  * require autoloadeder
  */
-require_once 'autoload.php';
+require_once 'vendor/autoload.php';
 require_once 'conn.php';
 use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
@@ -22,33 +22,33 @@ header('Content-Type: application/json');
 class StatObj {
 	public $last_team_wu;
 	public $rank;
-	public $team_credit;
+	public $team_score;
 	public $team_work_units;
-	public $equipo_nombre;
+	public $team_name;
 	
-	function __construct($last_team_wu, $rank, $team_credit, $team_work_units, $equipo_nombre) {
+	function __construct($last_team_wu, $rank, $team_score, $team_work_units, $team_name) {
 		$this->last_team_wu = $last_team_wu;
 		$this->rank = $rank;
-		$this->team_credit = $team_credit;
+		$this->team_score = $team_score;
 		$this->team_work_units = $team_work_units;
-		$this->equipo_nombre = $equipo_nombre;
+		$this->team_name = $team_name;
 	}
 	
 	static function getStats($qty) {
 		$fahConn = new PDO(SERVER, USER, PWD);
-		$fahQuery = $fahConn->prepare("SELECT HEX(`ID`) as 'ID', `last_team_wu`, `rank`, `team_credit`, `team_work_units`, `name` as 'equipo_nombre' FROM fah_stats order by `ID` desc limit " . $qty);
+		$fahQuery = $fahConn->prepare("SELECT HEX(`ID`) as 'ID', `last_team_wu`, `rank`, `team_score`, `team_work_units`, `name` as 'team_name' FROM fah_stats order by `ID` desc limit " . $qty);
 		$fahQuery->execute();
 		$stats = $fahQuery->fetchAll(PDO::FETCH_ASSOC);
 		return $stats;
 	}
 	
 	function insertStat($connection) {
-		$fahQuery = $connection->prepare("INSERT INTO fah_stats (`ID`,`last_team_wu`,`rank`,`team_credit`,`team_work_units`,`name`) values (ordered_uuid(UUID()),?, ?, ?, ?, ?)");
+		$fahQuery = $connection->prepare("INSERT INTO fah_stats (`ID`,`last_team_wu`,`rank`,`team_score`,`team_work_units`,`name`) values (ordered_uuid(UUID()),?, ?, ?, ?, ?)");
 		$fahQuery->bindParam(1, $this->last_team_wu);
 		$fahQuery->bindParam(2, $this->rank);
-		$fahQuery->bindParam(3, $this->team_credit);
+		$fahQuery->bindParam(3, $this->team_score);
 		$fahQuery->bindParam(4, $this->team_work_units);
-		$fahQuery->bindParam(5, $this->equipo_nombre);
+		$fahQuery->bindParam(5, $this->team_name);
 		
 		$fahQuery->execute();
 	}
@@ -62,9 +62,9 @@ $fahType = new ObjectType([
             'ID' => Type::id(),
             'last_team_wu' => Type::string(),
             'rank' => Type::int(),
-            'team_credit' => Type::int(),
+            'team_score' => Type::int(),
 			'team_work_units' => Type::int(),
-			'equipo_nombre' => Type::string()
+			'team_name' => Type::string()
 			]
         ]);
 	
@@ -89,13 +89,13 @@ $fahType = new ObjectType([
 				'args' => [
 					'last_team_wu' => Type::string(),
 					'rank' => Type::int(),
-					'team_credit' => Type::int(),
+					'team_score' => Type::int(),
 					'team_work_units' => Type::int(),
-					'equipo_nombre' => Type::string()
+					'team_name' => Type::string()
 				],
                 'resolve' => function ($root, $args) {
 					$resolveConn = new PDO(SERVER, USER, PWD);
-					$myStat = new StatObj($args['last_team_wu'], $args['rank'], $args['team_credit'], $args['team_work_units'], $args['equipo_nombre']);
+					$myStat = new StatObj($args['last_team_wu'], $args['rank'], $args['team_score'], $args['team_work_units'], $args['team_name']);
 					print_r($myStat);
 					$myStat->insertStat($resolveConn);
 					return $myStat;
