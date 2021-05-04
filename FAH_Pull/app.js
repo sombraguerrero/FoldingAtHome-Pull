@@ -30,11 +30,11 @@ https.get('https://api2.foldingathome.org/uid/3107', (res) => {
     try {
       const postData = JSON.parse(rawData);
       const teamData = postData.teams[1];
-      var myQuery = "{\"query\": \"mutation MutateStat($in_ltw:String, $in_rank:Int, $in_tscore:Int, $in_twu:Int, $in_tn:String) {writeStat(last_team_wu : $in_ltw, rank : $in_rank, team_score: $in_tscore, team_work_units: $in_twu, team_name: $in_tn) {last_team_wu rank team_score team_work_units team_name}}\",";
-      var varObj = { in_ltw: teamData.last, in_rank: postData.rank, in_tscore: teamData.score, in_twu: teamData.wus, in_tn: teamData.name};
-      var jsonVars = JSON.stringify(varObj) + '}';
-      var myVars = "\"variables\":" + jsonVars;
-      const writeData = myQuery + myVars;
+	  var graphql_obj = {
+		  query: "mutation MutateStat($in_ltw:String, $in_rank:Int, $in_tscore:Int, $in_twu:Int, $in_tn:String) {writeStat(last_team_wu : $in_ltw, rank : $in_rank, team_score: $in_tscore, team_work_units: $in_twu, team_name: $in_tn) {last_team_wu rank team_score team_work_units team_name}}",
+		  variables: { in_ltw: teamData.last, in_rank: postData.rank, in_tscore: teamData.score, in_twu: teamData.wus, in_tn: teamData.name }
+	  }
+	  var writeData = JSON.stringify(graphql_obj);
 
       const options = {
         hostname: 'localhost',
